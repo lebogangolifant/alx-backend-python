@@ -17,20 +17,10 @@ async def wait_random(max_delay: int = 10) -> float:
     return delay
 
 
-def task_wait_random(max_delay: int) -> asyncio.Task:
-    """
-    Creates an asyncio.Task for the wait_random function,
-    with the given max_delay.
-    """
-    loop = asyncio.get_event_loop()
-    task = loop.create_task(wait_random(max_delay))
-    return task
-
-
 async def task_wait_n(n: int, max_delay: int) -> List[float]:
     """
     Creates a list of asyncio.Tasks for the wait_random function,
     with the given max_delay.
     """
-    return await asyncio.gather(*(task_wait_random(max_delay)
-                                for _ in range(n)))
+    tasks = [wait_random(max_delay) for _ in range(n)]
+    return await asyncio.gather(*tasks)
