@@ -4,7 +4,7 @@ Measure Runtime module
 """
 
 import asyncio
-import time
+import timeit
 
 async_comprehension = __import__('1-async_comprehension').async_comprehension
 
@@ -14,13 +14,17 @@ async def measure_runtime() -> float:
     Measures the total runtime of executing async_comprehension
     four times in parallel.
     """
-    start_time = time.time()
+    start_time = timeit.default_timer()
 
     await asyncio.gather(
-        *[async_comprehension() for _ in range(4)]
+        async_comprehension(),
+        async_comprehension(),
+        async_comprehension(),
+        async_comprehension()
     )
 
-    end_time = time.time()
+    end_time = timeit.default_timer()
+
     total_runtime = end_time - start_time
 
     return total_runtime
