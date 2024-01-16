@@ -3,6 +3,7 @@
 Measure Runtime module
 """
 
+import random
 import asyncio
 import timeit
 
