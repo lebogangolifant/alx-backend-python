@@ -16,12 +16,13 @@ async def measure_runtime() -> float:
     """
     start_time = timeit.default_timer()
 
-    # Awaiting the results of async_comprehension calls
-    results = await asyncio.gather(
-        async_comprehension(),
-        async_comprehension(),
-        async_comprehension(),
-        async_comprehension()
+    await asyncio.gather(
+       *[
+             async_comprehension(),
+             async_comprehension(),
+             async_comprehension(),
+             async_comprehension()
+        ]
     )
 
     end_time = timeit.default_timer()
