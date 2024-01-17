@@ -6,7 +6,6 @@ Measure Runtime module
 import asyncio
 import random
 import timeit
-
 async_comprehension = __import__('1-async_comprehension').async_comprehension
 
 
@@ -22,8 +21,6 @@ async def measure_runtime() -> float:
         async_comprehension(),
         async_comprehension(),
         async_comprehension()
-    )
-
+        )
     end_time = timeit.default_timer()
-
     return end_time - start_time
