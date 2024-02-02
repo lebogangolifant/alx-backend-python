@@ -61,3 +61,19 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.assert_called_once_with(
                 'https://api.github.com/orgs/testorg/repos')
         self.assertEqual(result, expected_repos)
+
+    @parameterized.expand([
+        ({'license': {'key': 'my_license'}}, 'my_license', True),
+        ({'license': {'key': 'other_license'}}, 'my_license', False)
+    ])
+    def test_has_license(self, repo, license_key, expected_result):
+        """
+        Test has_license method of GithubOrgClient
+        """
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock,
+                   return_value='https://api.github.com/orgs/testorg/repos'):
+            with patch('client.GithubOrgClient.get_json', return_value=[repo]):
+                cli = GithubOrgClient('testorg')
+                result = cli.has_license(license_key)
+                self.assertEqual(result, expected_result)
