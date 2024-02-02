@@ -87,15 +87,18 @@ class TestGithubOrgClient(unittest.TestCase):
     ]
 )
 class TestIntegrationGithubOrgClient(unittest.TestCase):
-    """Integration tests for GithubOrgClient"""
+    """
+    Integration tests for GithubOrgClient
+    """
 
     @classmethod
     def setUpClass(cls):
-        """Set up class for the test suite"""
+        """
+        Set up class for the test suite
+        """
         cls.get_patcher = patch('requests.get')
         cls.mock_get = cls.get_patcher.start()
 
-        # Set side effect for requests.get(url).json() based on fixtures
         cls.mock_get.side_effect = [
             Mock(json=lambda: cls.org_payload),
             Mock(json=lambda: cls.repos_payload),
@@ -105,12 +108,25 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Tear down class for the test suite"""
+        """
+        Tear down class for the test suite
+        """
         cls.get_patcher.stop()
 
     def test_public_repos_integration(self):
-        """Integration test for public_repos method"""
+        """
+        Integration test for public_repos method
+        """
         cli = GithubOrgClient('testorg')
         result = cli.public_repos
 
         self.assertEqual(result, self.expected_repos)
+
+    def test_public_repos_with_license_integration(self):
+        """
+        Integration test for public_repos method with license argument
+        """
+        cli = GithubOrgClient('testorg')
+        result = cli.public_repos(license="apache-2.0")
+
+        self.assertEqual(result, self.apache2_repos)
