@@ -4,7 +4,7 @@ Module contains unit tests for client.GithubOrgClient.
 """
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 from parameterized import parameterized
 from client import GithubOrgClient
 
@@ -42,3 +42,22 @@ class TestGithubOrgClient(unittest.TestCase):
         result = cli._public_repos_url
 
         self.assertEqual(result, expected)
+
+    @patch('client.GithubOrgClient.get_json', return_value=[
+           {'name': 'repo1'}, {'name': 'repo2'}])
+    @patch('client.GithubOrgClient._public_repos_url',
+           new_callable=PropertyMock,
+           return_value='https://api.github.com/orgs/testorg/repos')
+    def test_public_repos(self, mock_public_repos_url, mock_get_json):
+        """
+        Test public_repos method of GithubOrgClient
+        """
+        expected_repos = [{'name': 'repo1'}, {'name': 'repo2'}]
+        cli = GithubOrgClient('testorg')
+
+        result = cli.public_repos
+
+        mock_public_repos_url.assert_called_once()
+        mock_get_json.assert_called_once_with(
+                'https://api.github.com/orgs/testorg/repos')
+        self.assertEqual(result, expected_repos)
