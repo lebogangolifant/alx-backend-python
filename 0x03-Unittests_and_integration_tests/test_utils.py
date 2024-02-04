@@ -25,11 +25,11 @@ class TestAccessNestedMap(unittest.TestCase):
         Ensure access_nested_map returns the expected result.
         """
         actual_output = access_nested_map(map, path)
-        self.assertEqual(actual, expected_result)
+        self.assertEqual(actual_output, expected_result)
 
     @parameterized.expand([
-       ({}, ("a",), KeyError, "Key 'a' not found"),
-       ({"a": 1}, ("a", "b"), KeyError, "Key 'b' not found"),
+       ({}, ("a",), 'a'),
+       ({"a": 1}, ("a", "b"), 'b')
     ])
     def test_nested_map_exception(self, map, path, expected_exc):
         """
