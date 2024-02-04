@@ -35,9 +35,9 @@ class TestAccessNestedMap(unittest.TestCase):
         """
         Ensure access_nested_map raises the expected exception.
         """
-        with self.assertRaises(KeyError,
-                               msg=f"Key '{expected_exc}' not found"):
+        with self.assertRaises(KeyError) as e:
             access_nested_map(map, path)
+        self.assertEqual(expected_exc, str(e.exception))
 
 
 class TestGetJson(unittest.TestCase):
